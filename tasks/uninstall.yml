@@ -18,3 +18,8 @@
       ansible.builtin.file:
         path: "{{ devture_systemd_docker_base_systemd_path }}/{{ radicale_identifier }}.service"
         state: absent
+
+    - name: Ensure radicale path doesn't exist
+      ansible.builtin.file:
+        path: "{{ radicale_base_path }}"
+        state: absent
