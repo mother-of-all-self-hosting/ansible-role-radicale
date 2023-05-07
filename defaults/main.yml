@@ -22,6 +22,11 @@ radicale_base_path: "/{{ radicale_identifier }}"
 radicale_data_path: "{{ radicale_base_path }}/data"
 radicale_config_path: "{{ radicale_base_path }}/config"
 
+# default is htpasswd
+radicale_auth_type: htpasswd
+# if you use https://gitlab.com/etke.cc/radicale-auth-matrix
+radicale_auth_matrix_server: ''
+
 # A list of `htpasswd -nb user password` entries
 # Also see `radicale_credentials` for a more convenient way to create credentials.
 # Ansible will run `htpasswd` on the entries in `radicale_credentials` and append them to this list.

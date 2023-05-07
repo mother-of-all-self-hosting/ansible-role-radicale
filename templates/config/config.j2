@@ -6,8 +6,9 @@ max_connections = 1000
 timeout = 60
 
 [auth]
-type = htpasswd
+type = {{ radicale_auth_type }}
 htpasswd_filename = /config/htpasswd
+matrix_server = {{ radicale_auth_matrix_server }}
 realm = protected
 
 [storage]
