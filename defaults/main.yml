@@ -21,6 +21,8 @@ radicale_path_prefix: /
 radicale_base_path: "/{{ radicale_identifier }}"
 radicale_data_path: "{{ radicale_base_path }}/data"
 radicale_config_path: "{{ radicale_base_path }}/config"
+radicale_data_collections_path: "{{ radicale_data_path }}/{{ radicale_data_collections_subdir }}"
+radicale_data_collections_subdir: collections
 
 # default is htpasswd
 radicale_auth_type: htpasswd

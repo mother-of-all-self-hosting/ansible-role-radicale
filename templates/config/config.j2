@@ -1,3 +1,4 @@
+#jinja2: lstrip_blocks: "True"
 # {{ ansible_managed }}
 
 [server]
@@ -7,12 +8,16 @@ timeout = 60
 
 [auth]
 type = {{ radicale_auth_type }}
-htpasswd_filename = /config/htpasswd
+{% if radicale_auth_type == 'radicale_auth_matrix' %}
 matrix_server = {{ radicale_auth_matrix_server }}
+{% elif radicale_auth_type == 'htpasswd' %}
+htpasswd_filename = /config/htpasswd
 realm = protected
+{% endif %}
 
 [storage]
-filesystem_folder = /data/collections
+filesystem_folder = /data/{{ radicale_data_collections_subdir }}
+hook = git add -A && (git diff --cached --quiet || git commit -m "Changes by "%(user)s)
 
 [logging]
 level = warning

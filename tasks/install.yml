@@ -1,5 +1,4 @@
 ---
-
 - name: Ensure radicale paths exist
   ansible.builtin.file:
     path: "{{ item }}"
@@ -11,23 +10,60 @@
     - "{{ radicale_base_path }}"
     - "{{ radicale_config_path }}"
     - "{{ radicale_data_path }}"
+    - "{{ radicale_data_collections_path }}"
+
+- name: Ensure git installed
+  ansible.builtin.package:
+    name: git
+    state: present
+
+- name: Check git repo state
+  ansible.builtin.stat:
+    path: "{{ radicale_data_collections_path }}/.git"
+  register: radicale_git_stat
+
+- name: Ensure git repo is initialized
+  ansible.builtin.command:
+    cmd: git init
+  args:
+    chdir: "{{ radicale_data_collections_path }}"
+    creates: "{{ radicale_data_collections_path }}/.git"
+  when: not radicale_git_stat.stat.exists | bool
+
+- name: Ensure git repo permissions is set
+  ansible.builtin.file:
+    path: "{{ radicale_data_collections_path }}/.git"
+    state: directory
+    recurse: true
+    owner: "{{ radicale_uid }}"
+    group: "{{ radicale_gid }}"
+
+- name: Ensure .gitignore is set
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/.gitignore.j2"
+    dest: "{{ radicale_data_collections_path }}/.gitignore"
+    owner: "{{ radicale_uid }}"
+    group: "{{ radicale_gid }}"
+    mode: 0644
 
 - name: Convert radicale credentials to htpasswd entries
   ansible.builtin.include_tasks: "{{ role_path }}/tasks/includes/convert_credentials_to_htpasswd.yml"
   with_items: "{{ radicale_credentials | unique }}"
+  when: radicale_auth_type == 'htpasswd'
   loop_control:
     loop_var: credential_entry
 
 - name: Ensure radicale config files are present
   ansible.builtin.template:
-    src: "{{ role_path }}/templates/config/{{ item }}.j2"
-    dest: "{{ radicale_config_path }}/{{ item }}"
+    src: "{{ role_path }}/templates/config/{{ item.path }}.j2"
+    dest: "{{ radicale_config_path }}/{{ item.path }}"
     owner: "{{ radicale_uid }}"
     group: "{{ radicale_gid }}"
     mode: 0644
+  when: item.valid
   with_items:
-    - config
-    - htpasswd
+    - { path: config, valid: true }
+    - { path: htpasswd, valid: "{{ radicale_auth_type == 'htpasswd' }}" }
 
 - name: Ensure radicale support files installed
   ansible.builtin.template:
