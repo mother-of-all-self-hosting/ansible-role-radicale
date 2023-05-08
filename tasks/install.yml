@@ -30,6 +30,16 @@
     creates: "{{ radicale_data_collections_path }}/.git"
   when: not radicale_git_stat.stat.exists | bool
 
+- name: Ensure git repo is configured
+  ansible.builtin.command:
+    cmd: "git config {{ item }}"
+  args:
+    chdir: "{{ radicale_data_collections_path }}"
+  with_items:
+    - "user.email nobody@nowhere"
+    - "user.name Radicale"
+  when: not radicale_git_stat.stat.exists | bool
+
 - name: Ensure git repo permissions is set
   ansible.builtin.file:
     path: "{{ radicale_data_collections_path }}/.git"
