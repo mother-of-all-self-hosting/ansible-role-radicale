@@ -17,7 +17,6 @@ realm = protected
 
 [storage]
 filesystem_folder = /data/{{ radicale_data_collections_subdir }}
-hook = git add -A && (git diff --cached --quiet || git commit -m "Changes by %(user)s")
 
 [logging]
 level = warning
