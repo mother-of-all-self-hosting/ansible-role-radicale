@@ -10,12 +10,17 @@
 radicale_enabled: true
 
 radicale_identifier: radicale
-
-radicale_uid: ''
-radicale_gid: ''
+radicale_base_path: "/{{ radicale_identifier }}"
+radicale_data_path: "{{ radicale_base_path }}/data"
+radicale_config_path: "{{ radicale_base_path }}/config"
+radicale_data_collections_path: "{{ radicale_data_path }}/{{ radicale_data_collections_subdir }}"
+radicale_data_collections_subdir: collections
 
 # renovate: datasource=docker depName=docker.io/tomsquest/docker-radicale versioning=semver
 radicale_version: 3.5.1.0
+
+radicale_uid: ''
+radicale_gid: ''
 
 # The hostname at which radicale is served.
 radicale_hostname: ''
@@ -24,41 +29,11 @@ radicale_hostname: ''
 # This value must either be `/` or not end with a slash (e.g. `/radicale`).
 radicale_path_prefix: /
 
-radicale_base_path: "/{{ radicale_identifier }}"
-radicale_data_path: "{{ radicale_base_path }}/data"
-radicale_config_path: "{{ radicale_base_path }}/config"
-radicale_data_collections_path: "{{ radicale_data_path }}/{{ radicale_data_collections_subdir }}"
-radicale_data_collections_subdir: collections
-
-# default is htpasswd
-radicale_auth_type: htpasswd
-# if you use https://github.com/etkecc/radicale-auth-matrix
-radicale_auth_matrix_server: ''
-
-# A list of `htpasswd -nb user password` entries
-# Also see `radicale_credentials` for a more convenient way to create credentials.
-# Ansible will run `htpasswd` on the entries in `radicale_credentials` and append them to this list.
-radicale_htpasswds: []
-
-# A list of credential entries
-#
-# Example:
-# radicale_credentials:
-#   - username: someone
-#     password: secret-password
-#   - username: another
-#     password: more-secret-password
-radicale_credentials: []
-
-# Temporary file path on the host that runs Ansible.
-# Used for converting the `radicale_credentials` entries to `radicale_htpasswds` entries.
-radicale_credentials_basicauth_file_tmp: "/tmp/ansible_htpasswd"
-
 radicale_container_image: "{{ radicale_container_image_registry_prefix }}tomsquest/docker-radicale:{{ radicale_container_image_tag }}"
+radicale_container_image_tag: "{{ radicale_version }}"
 radicale_container_image_registry_prefix: "{{ radicale_container_image_registry_prefix_upstream }}"
 radicale_container_image_registry_prefix_upstream: "{{ radicale_container_image_registry_prefix_upstream_default }}"
 radicale_container_image_registry_prefix_upstream_default: docker.io/
-radicale_container_image_tag: "{{ radicale_version }}"
 radicale_container_image_force_pull: "{{ radicale_container_image.endswith(':latest') }}"
 
 # The base container network. It will be auto-created by this role if it doesn't exist already.
@@ -134,12 +109,6 @@ radicale_container_health_interval: "{{ '5s' if radicale_container_labels_traefi
 # A list of extra arguments to pass to the container
 radicale_container_extra_arguments: []
 
-# Controls the TAKE_FILE_OWNERSHIP environment variable
-radicale_environment_variable_take_file_ownership: false
-
-# Additional environment variables.
-radicale_environment_variables_additional_variables: ''
-
 # Specifies the value of the `X-XSS-Protection` header
 # Stops pages from loading when they detect reflected cross-site scripting (XSS) attacks.
 #
@@ -196,3 +165,33 @@ radicale_systemd_required_services_list: "{{ radicale_systemd_required_services_
 radicale_systemd_required_services_list_default: "{{ [devture_systemd_docker_base_docker_service_name] if devture_systemd_docker_base_docker_service_name else [] }}"
 radicale_systemd_required_services_list_auto: []
 radicale_systemd_required_services_list_custom: []
+
+# Controls the TAKE_FILE_OWNERSHIP environment variable
+radicale_environment_variable_take_file_ownership: false
+
+# Additional environment variables.
+radicale_environment_variables_additional_variables: ''
+
+# default is htpasswd
+radicale_auth_type: htpasswd
+# if you use https://github.com/etkecc/radicale-auth-matrix
+radicale_auth_matrix_server: ''
+
+# A list of `htpasswd -nb user password` entries
+# Also see `radicale_credentials` for a more convenient way to create credentials.
+# Ansible will run `htpasswd` on the entries in `radicale_credentials` and append them to this list.
+radicale_htpasswds: []
+
+# A list of credential entries
+#
+# Example:
+# radicale_credentials:
+#   - username: someone
+#     password: secret-password
+#   - username: another
+#     password: more-secret-password
+radicale_credentials: []
+
+# Temporary file path on the host that runs Ansible.
+# Used for converting the `radicale_credentials` entries to `radicale_htpasswds` entries.
+radicale_credentials_basicauth_file_tmp: "/tmp/ansible_htpasswd"
