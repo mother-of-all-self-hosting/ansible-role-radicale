@@ -14,6 +14,7 @@ radicale_identifier: radicale
 radicale_uid: ''
 radicale_gid: ''
 
+# renovate: datasource=docker depName=docker.io/tomsquest/docker-radicale versioning=semver
 radicale_version: 3.5.1.0
 
 # The hostname at which radicale is served.
