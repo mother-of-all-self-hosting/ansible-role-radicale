@@ -160,11 +160,14 @@ radicale_floc_optout_enabled: true
 # See: `radicale_http_header_strict_transport_security`
 radicale_hsts_preload_enabled: false
 
-# List of systemd services that radicale.service depends on
+# List of systemd services that Radicale systemd service depends on
 radicale_systemd_required_services_list: "{{ radicale_systemd_required_services_list_default + radicale_systemd_required_services_list_auto + radicale_systemd_required_services_list_custom }}"
 radicale_systemd_required_services_list_default: "{{ [devture_systemd_docker_base_docker_service_name] if devture_systemd_docker_base_docker_service_name else [] }}"
 radicale_systemd_required_services_list_auto: []
 radicale_systemd_required_services_list_custom: []
+
+# List of systemd services that the Radicale systemd service wants
+radicale_systemd_wanted_services_list: []
 
 # Controls the TAKE_FILE_OWNERSHIP environment variable
 radicale_environment_variable_take_file_ownership: false
