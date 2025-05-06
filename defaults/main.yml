@@ -39,6 +39,9 @@ radicale_container_image_force_pull: "{{ radicale_container_image.endswith(':lat
 # The base container network. It will be auto-created by this role if it doesn't exist already.
 radicale_container_network: "{{ radicale_identifier }}"
 
+# The port number of the server
+radicale_server_http_port: 5232
+
 # A list of additional container networks that the container would be connected to.
 # The role does not create these networks, so make sure they already exist.
 # Use this to expose this container to another reverse proxy, which runs in a different container network.
