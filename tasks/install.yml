@@ -24,7 +24,7 @@
   loop_control:
     loop_var: credential_entry
 
-- name: Ensure radicale config files are present
+- name: Ensure radicale configuration files installed
   ansible.builtin.template:
     src: "{{ role_path }}/templates/config/{{ item.path }}.j2"
     dest: "{{ radicale_config_path }}/{{ item.path }}"
@@ -69,3 +69,4 @@
   ansible.builtin.template:
     src: "{{ role_path }}/templates/systemd/radicale.service.j2"
     dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ radicale_identifier }}.service"
+    mode: 0644
