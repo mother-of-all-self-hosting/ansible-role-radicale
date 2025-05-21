@@ -22,10 +22,10 @@ radicale_version: 3.5.2.0
 radicale_uid: ''
 radicale_gid: ''
 
-# The hostname at which radicale is served.
+# The hostname at which Radicale is served.
 radicale_hostname: ''
 
-# The path at which radicale is served.
+# The path at which Radicale is served.
 # This value must either be `/` or not end with a slash (e.g. `/radicale`).
 radicale_path_prefix: /
 
