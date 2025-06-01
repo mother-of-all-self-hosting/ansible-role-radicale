@@ -8,7 +8,7 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    mode: 0750
+    mode: "0750"
     owner: "{{ radicale_uid }}"
     group: "{{ radicale_gid }}"
   with_items:
@@ -30,7 +30,7 @@
     dest: "{{ radicale_config_path }}/{{ item.path }}"
     owner: "{{ radicale_uid }}"
     group: "{{ radicale_gid }}"
-    mode: 0644
+    mode: "0644"
   when: item.valid
   with_items:
     - { path: config, valid: true }
@@ -40,7 +40,7 @@
   ansible.builtin.template:
     src: "{{ role_path }}/templates/{{ item }}.j2"
     dest: "{{ radicale_base_path }}/{{ item }}"
-    mode: 0640
+    mode: "0640"
     owner: "{{ radicale_uid }}"
     group: "{{ radicale_gid }}"
   with_items:
@@ -69,4 +69,4 @@
   ansible.builtin.template:
     src: "{{ role_path }}/templates/systemd/radicale.service.j2"
     dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ radicale_identifier }}.service"
-    mode: 0644
+    mode: "0644"
