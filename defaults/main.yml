@@ -172,7 +172,10 @@ radicale_systemd_required_services_list_auto: []
 radicale_systemd_required_services_list_custom: []
 
 # List of systemd services that the Radicale systemd service wants
-radicale_systemd_wanted_services_list: []
+radicale_systemd_wanted_services_list: "{{ radicale_systemd_wanted_services_list_default + radicale_systemd_wanted_services_list_auto + radicale_systemd_wanted_services_list_custom }}"
+radicale_systemd_wanted_services_list_default: []
+radicale_systemd_wanted_services_list_auto: []
+radicale_systemd_wanted_services_list_custom: []
 
 # Controls the TAKE_FILE_OWNERSHIP environment variable
 radicale_environment_variable_take_file_ownership: false
