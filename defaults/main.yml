@@ -182,12 +182,6 @@ radicale_systemd_wanted_services_list_default: []
 radicale_systemd_wanted_services_list_auto: []
 radicale_systemd_wanted_services_list_custom: []
 
-# Controls the TAKE_FILE_OWNERSHIP environment variable
-radicale_environment_variable_take_file_ownership: false
-
-# Additional environment variables.
-radicale_environment_variables_additional_variables: ""
-
 # default is htpasswd
 radicale_auth_type: htpasswd
 # if you use https://github.com/etkecc/radicale-auth-matrix
@@ -211,3 +205,12 @@ radicale_credentials: []
 # Temporary file path on the host that runs Ansible.
 # Used for converting the `radicale_credentials` entries to `radicale_htpasswds` entries.
 radicale_credentials_basicauth_file_tmp: "/tmp/ansible_htpasswd"
+
+# Specify the timezone
+radicale_environment_variables_tz: UTC
+
+# Controls the TAKE_FILE_OWNERSHIP environment variable
+radicale_environment_variable_take_file_ownership: false
+
+# Additional environment variables.
+radicale_environment_variables_additional_variables: ""
