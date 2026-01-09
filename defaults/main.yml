@@ -97,12 +97,15 @@ radicale_container_labels_traefik_additional_response_headers_custom: {}
 
 # radicale_container_labels_additional_labels contains a multiline string with additional labels to add to the container label file.
 # See `../templates/labels.j2` for details.
+# To add your own custom labels, use `radicale_container_labels_additional_labels_custom`
 #
 # Example:
-# radicale_container_labels_additional_labels: |
-#   my.label=1
-#   another.label="here"
-radicale_container_labels_additional_labels: ''
+# radicale_container_labels_additional_labels_custom:
+#   - my.label=1
+#   - another.label="here"
+radicale_container_labels_additional_labels: "{{ radicale_container_labels_additional_labels_auto + radicale_container_labels_additional_labels_custom }}"
+radicale_container_labels_additional_labels_auto: []
+radicale_container_labels_additional_labels_custom: []
 
 # Specifies how often the container health-check will run.
 #
