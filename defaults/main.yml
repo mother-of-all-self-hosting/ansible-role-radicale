@@ -227,8 +227,13 @@ radicale_auth_type: htpasswd
 radicale_auth_matrix_server: ""
 
 # A list of `htpasswd -nb user password` entries
-# Also see `radicale_credentials` for a more convenient way to create credentials.
-# Ansible will run `htpasswd` on the entries in `radicale_credentials` and append them to this list.
+# This is the preferred way to configure HTTP Basic authentication, because it
+# avoids the `passlib` dependency and keeps the resulting configuration stable
+# across playbook runs.
+#
+# Also see `radicale_credentials` for a legacy convenience method.
+# Ansible will convert the entries in `radicale_credentials` and append them to
+# this list.
 radicale_htpasswds: []
 
 # A list of credential entries
@@ -239,6 +244,12 @@ radicale_htpasswds: []
 #     password: secret-password
 #   - username: another
 #     password: more-secret-password
+#
+# This convenience method is discouraged. It requires the `passlib` Python
+# library on the Ansible controller, may be affected by passlib/bcrypt
+# compatibility issues (https://foss.heptapod.net/python-libs/passlib/-/issues/196),
+# and generates non-deterministic hashes which can lead to unnecessary changes.
+# Prefer defining `radicale_htpasswds` instead.
 radicale_credentials: []
 
 # Temporary file path on the host that runs Ansible.
