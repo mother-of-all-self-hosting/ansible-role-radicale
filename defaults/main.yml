@@ -35,7 +35,6 @@ radicale_container_image_tag: "{{ radicale_version }}"
 radicale_container_image_registry_prefix: "{{ radicale_container_image_registry_prefix_upstream }}"
 radicale_container_image_registry_prefix_upstream: "{{ radicale_container_image_registry_prefix_upstream_default }}"
 radicale_container_image_registry_prefix_upstream_default: docker.io/
-radicale_container_image_force_pull: "{{ radicale_container_image.endswith(':latest') }}"
 
 radicale_container_image_self_build: false
 radicale_container_image_self_build_name: "kozea/radicale:{{ radicale_container_image_self_build_repo_version }}" # The image name must be lowercase
