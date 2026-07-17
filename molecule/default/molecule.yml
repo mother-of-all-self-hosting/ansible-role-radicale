@@ -33,7 +33,7 @@ provisioner:
         # Variables for Radicale
         radicale_uid: 1000
         radicale_gid: 1000
-        radicale_hostname: radicale
+        radicale_hostname: localhost
         radicale_container_labels_traefik_enabled: false
         radicale_container_http_host_bind_port: 5232
   env:
