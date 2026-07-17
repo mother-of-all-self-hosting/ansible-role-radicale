@@ -23,6 +23,12 @@
         fail_msg: "radicale.service not active ({{ radicale_service.status.ActiveState }})"
         success_msg: "radicale.service is active"
 
+    - name: Retrieve Radicale service log for debugging
+      when: radicale_debug_service_enabled | bool
+      ansible.builtin.command:
+        cmd: journalctl -xeu radicale.service
+      changed_when: false
+
     - name: Wait for Radicale HTTP endpoint to respond (up to 10m)
       ansible.builtin.uri:
         url: "http://localhost:5232/"
