@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2026 Suguru Hirahara
 # SPDX-FileCopyrightText: 2026 spatterlight
+# SPDX-FileCopyrightText: 2026 Slavi Pantaleev
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -9,6 +10,10 @@
   become: true
   gather_facts: true
   tasks:
+    - name: Load the Radicale Molecule test credentials
+      ansible.builtin.include_vars:
+        file: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/vars/credentials.yml"
+
     - name: Include roles for Radicale Molecule tests
       ansible.builtin.include_role:
         name: "{{ role_name }}"

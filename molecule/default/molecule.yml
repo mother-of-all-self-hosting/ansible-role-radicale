@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2026 Suguru Hirahara
 # SPDX-FileCopyrightText: 2026 spatterlight
+# SPDX-FileCopyrightText: 2026 Slavi Pantaleev
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -31,12 +32,54 @@ provisioner:
         # Helper variables
         radicale_debug_service_enabled: false
 
+        # The port on the host that Radicale is published on.
+        radicale_molecule_bind_port: 5232
+
+        # The name of the container that the role creates, which is what
+        # `radicale_identifier` defaults to. `verify.yml` asks it for its version.
+        radicale_molecule_container_name: radicale
+
+        # The command that reports the version of the running Radicale, and how
+        # many dot-separated components of `radicale_version` it can be compared
+        # against.
+        #
+        # The `tomsquest/docker-radicale` image carries its own release number as
+        # a fourth component (image 3.7.6.0 packages Radicale 3.7.6), so only the
+        # first three belong to Radicale itself. The role derives the self-build
+        # branch name from the same three.
+        radicale_molecule_version_command: /venv/bin/radicale --version
+        radicale_molecule_version_components: 3
+
+        # Where the `[storage] filesystem_folder` setting in the configuration
+        # the role generates makes Radicale keep collections, as seen from the
+        # host through the `/data` bind mount, plus the subfolder Radicale
+        # creates underneath it.
+        #
+        # Spelled out literally, because `verify.yml` does not include the role
+        # and so cannot resolve the role's derived default. Should the role's
+        # defaults ever stop resolving to this, the storage probe fails loudly
+        # rather than quietly checking nothing.
+        radicale_molecule_collections_path: /radicale/data/collections
+        radicale_molecule_collection_root_subdir: collection-root
+
+        # The calendar collection and event that the DAV round-trip in
+        # `verify.yml` creates. The UID is distinctive enough that finding it
+        # again can only mean Radicale really stored what was sent to it.
+        radicale_molecule_calendar_name: molecule-calendar
+        radicale_molecule_event_uid: molecule-roundtrip-6f1b9c2a
+
         # Variables for Radicale
         radicale_uid: 1000
         radicale_gid: 1000
         radicale_hostname: localhost
         radicale_container_labels_traefik_enabled: false
-        radicale_container_http_host_bind_port: 5232
+        radicale_container_http_host_bind_port: "127.0.0.1:5232"
+
+        # The test user's credentials are deliberately NOT defined here.
+        # A bcrypt password hash is full of dollar signs, and Molecule expands
+        # anything looking like an environment variable in this file.
+        # `converge.yml` and `verify.yml` read them from `vars/credentials.yml`
+        # instead, where nothing interpolates them.
   env:
     # Workaround for https://github.com/ansible/molecule/issues/4391
     ANSIBLE_ROLES_PATH: ${MOLECULE_PROJECT_DIRECTORY}/..:/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles:~/.ansible/roles
