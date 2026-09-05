@@ -284,10 +284,7 @@
     that: >-
       radicale_version_command.stdout | trim
       == radicale_defaults.radicale_version.split('.')[0:radicale_molecule_version_components | int] | join('.')
-    fail_msg: >-
-      Radicale reports {{ radicale_version_command.stdout | trim }}, expected
-      {{ radicale_defaults.radicale_version.split('.')[0:radicale_molecule_version_components | int] | join('.') }}
-      (out of radicale_version {{ radicale_defaults.radicale_version }})
+    fail_msg: "Radicale reports {{ radicale_version_command.stdout | trim | default('none') }}, expected {{ radicale_defaults.radicale_version.split('.')[0:radicale_molecule_version_components | int] | join('.') }}"
     success_msg: "Radicale reports {{ radicale_version_command.stdout | trim }}"
 
 - name: Show the Radicale verification summary
