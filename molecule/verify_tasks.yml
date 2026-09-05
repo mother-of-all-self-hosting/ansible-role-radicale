@@ -6,11 +6,9 @@
 
 ---
 # The role is not included in this playbook, so its defaults are not in
-# scope. Reading defaults/main.yml directly keeps the version assertion
-# below tied to the value that Renovate bumps, with nothing to keep in sync
-# in this scenario. Only `radicale_version` is read out of it, and it is a
-# literal - the variables derived from it would not resolve here.
-- name: Load the Radicale role defaults
+# scope. Reading defaults/main.yml directly ties the version assertion
+# below.
+- name: Load the role defaults
   ansible.builtin.include_vars:
     file: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/defaults/main.yml"
     name: radicale_defaults
