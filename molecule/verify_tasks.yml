@@ -24,21 +24,27 @@
     radicale_molecule_event_url: "{{ radicale_molecule_base_url }}/{{ radicale_molecule_username }}/{{ radicale_molecule_calendar_name }}/{{ radicale_molecule_event_uid }}.ics"
     radicale_molecule_event_storage_path: "{{ radicale_molecule_collections_path }}/{{ radicale_molecule_collection_root_subdir }}/{{ radicale_molecule_username }}/{{ radicale_molecule_calendar_name }}/{{ radicale_molecule_event_uid }}.ics"
 
-- name: Wait for Radicale service to become active (up to 180s)
-  ansible.builtin.systemd:
+- name: Wait for the Radicale systemd service to become active (up to 180s)
+  ansible.builtin.systemd_service:
     name: radicale.service
   register: radicale_service
   until: radicale_service.status.ActiveState == 'active'
   retries: 36
   delay: 5
+  # So that giving up is reported by the assertion below rather than as a
+  # wall of systemd unit properties.
+  failed_when: false
 
-- name: Assert Radicale service is active
+# `Restart=always` in the systemd unit means that even a container which crashes
+# and gets restarted reads as active here, so this is a precondition rather than
+# a result.
+- name: Assert the Radicale systemd service is active
   ansible.builtin.assert:
     that: radicale_service.status.ActiveState == 'active'
-    fail_msg: "radicale.service not active ({{ radicale_service.status.ActiveState }})"
+    fail_msg: "radicale.service is not active ({{ radicale_service.status.ActiveState }})"
     success_msg: "radicale.service is active"
 
-- name: Retrieve Radicale service log for debugging
+- name: Retrieve the Radicale systemd service log for debugging
   when: radicale_debug_service_enabled | bool
   ansible.builtin.command:
     cmd: journalctl -xeu radicale.service
