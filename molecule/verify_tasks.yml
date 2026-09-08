@@ -281,23 +281,23 @@
 # not available to playbooks running against the Molecule container.
 - name: Query the version of the running Radicale
   ansible.builtin.command:
-    cmd: docker exec {{ radicale_molecule_container_name }} {{ radicale_molecule_version_command }}
-  register: radicale_version_command
+    cmd: docker exec {{ radicale_molecule_container_name }} {{ radicale_molecule_version_reported }}
+  register: radicale_version_reported
   changed_when: false
 
 - name: Assert the running Radicale is the version this role installs
   ansible.builtin.assert:
     that: >-
-      radicale_version_command.stdout | trim
+      radicale_version_reported.stdout | trim
       == radicale_defaults.radicale_version.split('.')[0:radicale_molecule_version_components | int] | join('.')
-    fail_msg: "Radicale reports {{ radicale_version_command.stdout | trim | default('none') }}, expected {{ radicale_defaults.radicale_version.split('.')[0:radicale_molecule_version_components | int] | join('.') }}"
-    success_msg: "Radicale reports {{ radicale_version_command.stdout | trim }}"
+    fail_msg: "Radicale reports {{ radicale_version_reported.stdout | trim | default('none') }}, expected {{ radicale_defaults.radicale_version.split('.')[0:radicale_molecule_version_components | int] | join('.') }}"
+    success_msg: "Radicale reports {{ radicale_version_reported.stdout | trim }}"
 
 - name: Show the Radicale verification summary
   ansible.builtin.debug:
     msg:
       - "Radicale systemd: {{ radicale_service.status.ActiveState }}"
-      - "Radicale version: {{ radicale_version_command.stdout | trim }} (radicale_version {{ radicale_defaults.radicale_version }})"
+      - "Radicale version: {{ radicale_version_reported.stdout | trim }} (radicale_version {{ radicale_defaults.radicale_version }})"
       - "Radicale anonymous challenge: {{ radicale_anonymous.www_authenticate }}"
       - "Radicale wrong-password response: {{ radicale_wrong_password.status }}"
       - "Radicale calendar collection: {{ radicale_mkcalendar.status }}"
