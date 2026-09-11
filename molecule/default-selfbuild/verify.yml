@@ -9,6 +9,7 @@
   hosts: all
   become: true
   gather_facts: false
+
   vars:
     radicale_molecule_base_url: "http://127.0.0.1:{{ radicale_molecule_bind_port }}"
 
@@ -26,6 +27,9 @@
       SUMMARY:Molecule round-trip event
       END:VEVENT
       END:VCALENDAR
+
+    radicale_verify_units:
+      - radicale.service
 
   tasks:
     - name: Verify that Radicale works
